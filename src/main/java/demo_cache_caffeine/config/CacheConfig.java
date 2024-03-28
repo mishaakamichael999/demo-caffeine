@@ -22,18 +22,18 @@ public class CacheConfig {
     public CacheManager cacheManager() {
         CaffeineCacheManager cacheManager = new CaffeineCacheManager();
         cacheManager.registerCustomCache("item",
-                buildCache(100,200, 2));
+                buildCache(100,200, 20));
         cacheManager.registerCustomCache("shop",
-                buildCache(50,100, 1));
+                buildCache(50,100, 20));
         return cacheManager;
     }
 
     private Cache<Object, Object> buildCache(
-            int initialCapacity, int maximumSize, int durationInHours) {
+            int initialCapacity, int maximumSize, int durationInMinutes) {
         return Caffeine.newBuilder()
                 .initialCapacity(initialCapacity)
                 .maximumSize(maximumSize)
-                .expireAfterAccess(durationInHours, TimeUnit.MINUTES)
+                .expireAfterAccess(durationInMinutes, TimeUnit.SECONDS)
                 .evictionListener((Object key, Object value,
                                    RemovalCause cause) -> log.info(
                         String.format("Key %s was evicted (%s)%n", key, cause)))

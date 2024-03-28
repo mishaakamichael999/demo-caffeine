@@ -1,8 +1,11 @@
 package demo_cache_caffeine.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -13,6 +16,12 @@ import lombok.*;
 public class Shop {
     @Id
     private Integer id;
-    private String address;
+
+    private String city;
+
     private Integer area;
+
+    @OneToMany(mappedBy = "shop", cascade = CascadeType.ALL)
+    @JsonManagedReference
+    private List<Item> items = new ArrayList<>();
 }
